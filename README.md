@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Parcel Delivery Form (Next.js App Router)
 
-## Getting Started
+Мини-приложение для оформления заявки на доставку посылки в 3 шага и просмотра истории заявок.  
+Данные сохраняются в `localStorage`. Есть поиск, фильтры, удаление с подтверждением, просмотр деталей заявки, автосохранение черновика формы и Undo удаления.
 
-First, run the development server:
+## Стек
 
-```bash
+- Next.js (App Router)
+- TypeScript
+- Tailwind CSS (без UI-библиотек)
+- Zod (валидация)
+- localStorage (хранение заявок + черновик формы)
+
+## Возможности
+
+### Форма заявки `/` (3 шага)
+**Шаг 1 — Отправитель**
+- Имя (обязательно, минимум 2 символа)
+- Телефон (обязательно, проверка формата)
+- Город отправления (обязательно)
+
+**Шаг 2 — Получатель и посылка**
+- Имя получателя (обязательно)
+- Город назначения (обязательно, не может совпадать с городом отправления)
+- Тип груза: документы / хрупкое / обычное
+- Вес (0.1–30 кг)
+
+**Шаг 3 — Подтверждение**
+- Сводка данных (read-only)
+- Чекбоксы согласия (обязательно)
+- Отправка заявки
+
+Дополнительно:
+- Степпер + прогресс-бар над формой
+- Данные сохраняются при “Назад/Далее”
+- Автосохранение черновика (восстановление после перезагрузки)
+
+### История заявок `/orders`
+- Список заявок из `localStorage`
+- Карточка: откуда → куда, отправитель, тип груза, дата создания, статус
+- Поиск: по имени получателя и городу назначения
+- Фильтр: по типу груза
+- Удаление с подтверждением (кастомный диалог)
+- Undo удаления (toast “Отменить” в течение 5 секунд)
+- Переход на детали заявки по клику
+
+### Детали заявки `/orders/[id]`
+- Полная информация по заявке
+
+## Доступность (A11y) диалога
+Кастомный диалог реализован без `alert/confirm/prompt` и поддерживает:
+- `role="dialog"`, `aria-modal`, `aria-labelledby/aria-describedby`
+- закрытие по `Esc`
+- focus trap (Tab не уходит за пределы модалки)
+- возврат фокуса на элемент, который открыл диалог
+
+## Как запустить проект
+
+# 1) Установка зависимостей
+npm install
+# 2) Запуск dev-сервера
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
